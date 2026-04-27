@@ -71,7 +71,7 @@ db.veiculos.aggregate([
         $lookup: {
             from: "marcas",
             localField: "marca",
-            foreignField: "_id", // <- aqui está o ajuste
+            foreignField: "marca", // <- aqui está o ajuste
             as: "dados_marca",
         }
     },
@@ -79,3 +79,9 @@ db.veiculos.aggregate([
         $out: "veiculos_marca"
     }
 ]);
+
+
+db.veiculos_marca.updateMany(
+    {},
+    { $unset: { marca: ""}}
+);
