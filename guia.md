@@ -1,15 +1,25 @@
 ````md
-# 📘 Resumo Progressivo — MongoDB (Slides 1 ao 6, com exemplos)
+# 📘 Resumo Progressivo — MongoDB (Slides 1 ao 6, Organizado e Corrigido)
 
 ---
 
 # 1. Apresentação e Conceitos NoSQL
 
-O MongoDB faz parte do universo **NoSQL (Not Only SQL)**, criado para lidar melhor com grandes volumes de dados, flexibilidade estrutural e escalabilidade horizontal.
+O MongoDB faz parte do universo **NoSQL (Not Only SQL)**, criado para lidar melhor com:
 
-## 🔹 Principais categorias NoSQL:
+✔️ Grandes volumes de dados  
+✔️ Flexibilidade estrutural  
+✔️ Escalabilidade horizontal  
+✔️ Alta disponibilidade  
+
+---
+
+## 🔹 Principais categorias NoSQL
+
+---
 
 ### Chave-Valor
+
 Armazena pares simples de chave e valor.
 
 ```json
@@ -38,7 +48,7 @@ Armazena documentos JSON/BSON flexíveis.
 
 ### Orientado a Colunas
 
-Organiza por colunas em vez de linhas.
+Organiza dados por colunas.
 
 👉 Exemplo: Cassandra
 
@@ -46,7 +56,7 @@ Organiza por colunas em vez de linhas.
 
 ### Orientado a Grafos
 
-Modela relações complexas.
+Ideal para relações complexas.
 
 ```txt
 Anna -> conhece -> Carlos
@@ -56,7 +66,19 @@ Anna -> conhece -> Carlos
 
 ---
 
+# 🚀 Vantagens do MongoDB
+
+✔️ Schema flexível
+✔️ Fácil escalabilidade
+✔️ JSON intuitivo
+✔️ Boa performance
+✔️ Ideal para APIs e aplicações modernas
+
+---
+
 # 2. Introdução ao MongoDB
+
+---
 
 ## 🔹 Equivalência SQL vs MongoDB
 
@@ -69,7 +91,7 @@ Anna -> conhece -> Carlos
 
 ---
 
-## 🔹 Exemplo de documento:
+## 🔹 Exemplo de documento
 
 ```json
 {
@@ -81,9 +103,11 @@ Anna -> conhece -> Carlos
 
 ---
 
-## 🔹 Inserção
+# 🔹 Operações CRUD
 
-### insertOne()
+---
+
+## insertOne()
 
 ```js
 db.usuarios.insertOne({
@@ -94,7 +118,7 @@ db.usuarios.insertOne({
 
 ---
 
-### insertMany()
+## insertMany()
 
 ```js
 db.usuarios.insertMany([
@@ -105,7 +129,15 @@ db.usuarios.insertMany([
 
 ---
 
-## 🔹 Consulta com projeção
+## find()
+
+```js
+db.usuarios.find();
+```
+
+---
+
+## Projeção
 
 ```js
 db.usuarios.find(
@@ -118,33 +150,75 @@ db.usuarios.find(
 
 ---
 
-# 3. Operadores
-
-## 🔹 Comparação
-
-### $eq (igual)
+## findOne()
 
 ```js
-db.usuarios.find({ idade: { $eq: 28 } });
-```
-
-### $gt (maior que)
-
-```js
-db.usuarios.find({ idade: { $gt: 18 } });
-```
-
-### $lte (menor ou igual)
-
-```js
-db.usuarios.find({ idade: { $lte: 30 } });
+db.usuarios.findOne({
+  nome: "Anna"
+});
 ```
 
 ---
 
-## 🔹 Lógicos
+# 3. Operadores
 
-### $and
+---
+
+# 🔹 Comparação
+
+## `$eq`
+
+```js
+db.usuarios.find({
+  idade: { $eq: 28 }
+});
+```
+
+---
+
+## `$ne`
+
+```js
+db.usuarios.find({
+  cidade: { $ne: "Jaú" }
+});
+```
+
+---
+
+## `$gt`, `$gte`, `$lt`, `$lte`
+
+```js
+db.usuarios.find({
+  idade: { $gt: 18 }
+});
+```
+
+---
+
+## `$in`
+
+```js
+db.usuarios.find({
+  cidade: { $in: ["Jaú", "Bauru"] }
+});
+```
+
+---
+
+## `$nin`
+
+```js
+db.usuarios.find({
+  cidade: { $nin: ["Jaú"] }
+});
+```
+
+---
+
+# 🔹 Lógicos
+
+## `$and`
 
 ```js
 db.usuarios.find({
@@ -155,7 +229,9 @@ db.usuarios.find({
 });
 ```
 
-### $or
+---
+
+## `$or`
 
 ```js
 db.usuarios.find({
@@ -168,9 +244,21 @@ db.usuarios.find({
 
 ---
 
-## 🔹 Elemento
+## `$not`
 
-### $exists
+```js
+db.usuarios.find({
+  idade: {
+    $not: { $gt: 30 }
+  }
+});
+```
+
+---
+
+# 🔹 Elemento
+
+## `$exists`
 
 ```js
 db.usuarios.find({
@@ -178,7 +266,9 @@ db.usuarios.find({
 });
 ```
 
-### $type
+---
+
+## `$type`
 
 ```js
 db.usuarios.find({
@@ -188,9 +278,133 @@ db.usuarios.find({
 
 ---
 
-# 4. Modificando Estrutura de Documentos
+# 🔹 Regex
 
-## 🔹 $set (criar ou alterar campo)
+```js
+db.usuarios.find({
+  nome: { $regex: "^A" }
+});
+```
+
+---
+
+# 🔹 Arrays
+
+## `$all`
+
+```js
+db.usuarios.find({
+  habilidades: { $all: ["C#", "MongoDB"] }
+});
+```
+
+---
+
+## `$size`
+
+```js
+db.usuarios.find({
+  habilidades: { $size: 3 }
+});
+```
+
+---
+
+## `$elemMatch`
+
+```js
+db.pedidos.find({
+  produtos: {
+    $elemMatch: {
+      nome: "Mouse",
+      preco: { $gt: 50 }
+    }
+  }
+});
+```
+
+---
+
+# 4. Operadores Matemáticos
+
+---
+
+## `$sum`
+
+```js
+db.pedidos.aggregate([
+  {
+    $group: {
+      _id: "$clienteId",
+      totalGasto: { $sum: "$valor" }
+    }
+  }
+]);
+```
+
+---
+
+## `$sum: 1`
+
+👉 Conta documentos
+
+---
+
+## `$subtract`
+
+```js
+{
+  $subtract: ["$precoVenda", "$precoCusto"]
+}
+```
+
+---
+
+## `$multiply`
+
+```js
+{
+  $multiply: ["$quantidade", "$preco"]
+}
+```
+
+---
+
+## `$divide`
+
+```js
+{
+  $divide: ["$total", "$quantidade"]
+}
+```
+
+---
+
+## `$avg`
+
+```js
+{
+  $avg: "$valor"
+}
+```
+
+---
+
+## `$mod`
+
+```js
+{
+  $mod: ["$numero", 2]
+}
+```
+
+---
+
+# 5. Modificando Estrutura de Documentos
+
+---
+
+## `$set`
 
 ```js
 db.usuarios.updateOne(
@@ -201,7 +415,7 @@ db.usuarios.updateOne(
 
 ---
 
-## 🔹 $push (adicionar em array)
+## `$push`
 
 ```js
 db.usuarios.updateOne(
@@ -212,7 +426,29 @@ db.usuarios.updateOne(
 
 ---
 
-## 🔹 deleteOne()
+## `$unset`
+
+```js
+db.usuarios.updateOne(
+  { nome: "Anna" },
+  { $unset: { telefone: "" } }
+);
+```
+
+---
+
+## `$pull`
+
+```js
+db.usuarios.updateOne(
+  { nome: "Anna" },
+  { $pull: { hobbies: "Leitura" } }
+);
+```
+
+---
+
+## deleteOne()
 
 ```js
 db.usuarios.deleteOne({
@@ -222,7 +458,7 @@ db.usuarios.deleteOne({
 
 ---
 
-## 🔹 deleteMany()
+## deleteMany()
 
 ```js
 db.usuarios.deleteMany({
@@ -232,9 +468,11 @@ db.usuarios.deleteMany({
 
 ---
 
-# 5. Índices
+# 6. Índices
 
-## 🔹 Índice textual
+---
+
+# 🔹 Índice textual
 
 ```js
 db.usuarios.createIndex({
@@ -242,7 +480,9 @@ db.usuarios.createIndex({
 });
 ```
 
-### Busca:
+---
+
+## Busca textual
 
 ```js
 db.usuarios.find({
@@ -252,7 +492,9 @@ db.usuarios.find({
 
 ---
 
-## 🔹 Índice geoespacial (2dsphere)
+# 🔹 Índice geoespacial
+
+## Criar:
 
 ```js
 db.locais.createIndex({
@@ -260,25 +502,31 @@ db.locais.createIndex({
 });
 ```
 
-### Documento:
+---
 
-```json
-{
-  "nome": "Praça Central",
-  "localizacao": {
-    "type": "Point",
-    "coordinates": [-49.0, -22.3]
-  }
-}
+## Listar:
+
+```js
+db.locais.getIndexes();
 ```
 
 ---
 
-# 6. Agregação (Aggregation Pipeline)
+## Remover:
 
-A pipeline processa dados em etapas.
+```js
+db.locais.dropIndex("localizacao_2dsphere");
+```
 
-## 🔹 $match (filtra)
+---
+
+# 7. Aggregation Pipeline
+
+MongoDB processa dados em etapas.
+
+---
+
+## `$match`
 
 ```js
 db.multas.aggregate([
@@ -292,7 +540,7 @@ db.multas.aggregate([
 
 ---
 
-## 🔹 $group (agrupa)
+## `$group`
 
 ```js
 db.multas.aggregate([
@@ -307,7 +555,7 @@ db.multas.aggregate([
 
 ---
 
-## 🔹 $project (seleciona campos)
+## `$project`
 
 ```js
 db.multas.aggregate([
@@ -322,7 +570,41 @@ db.multas.aggregate([
 
 ---
 
-## 🔹 $lookup (relacionamento entre coleções)
+## `$sort`
+
+```js
+{
+  $sort: { valor: -1 }
+}
+```
+
+---
+
+## `$limit`
+
+```js
+{
+  $limit: 5
+}
+```
+
+---
+
+## `$unwind`
+
+```js
+{
+  $unwind: "$veiculos"
+}
+```
+
+---
+
+# 8. `$lookup` (JOIN no MongoDB)
+
+---
+
+## Exemplo:
 
 ### Multa:
 
@@ -341,7 +623,9 @@ db.multas.aggregate([
 }
 ```
 
-### Aggregate:
+---
+
+## Consulta:
 
 ```js
 db.multas.aggregate([
@@ -358,9 +642,37 @@ db.multas.aggregate([
 
 ---
 
-## 🔹 Referência vs Embedding
+# 🔥 Resultado:
 
-### Referência:
+```json
+{
+  "agente": [
+    {
+      "nome": "Anna"
+    }
+  ]
+}
+```
+
+---
+
+## `$unwind`
+
+```js
+{
+  $unwind: "$agente"
+}
+```
+
+👉 Transforma array em objeto
+
+---
+
+# 9. Referência vs Embedding
+
+---
+
+# 🔹 Referência
 
 ```json
 {
@@ -368,7 +680,17 @@ db.multas.aggregate([
 }
 ```
 
-### Embedding:
+---
+
+## Melhor para:
+
+✔️ Dados reutilizados
+✔️ Atualização centralizada
+✔️ Menos duplicação
+
+---
+
+# 🔹 Embedding
 
 ```json
 {
@@ -381,20 +703,52 @@ db.multas.aggregate([
 
 ---
 
-# 🚀 Conclusão Geral
+## Melhor para:
 
-MongoDB prioriza:
-
-✔️ Flexibilidade estrutural
-✔️ Alta performance
-✔️ Escalabilidade
+✔️ Leitura rápida
+✔️ Dados locais
 ✔️ Menos joins
-✔️ Dados orientados a documentos
 
-## 🔥 Regra prática:
+---
 
-👉 Dados muito relacionados e estáveis → Embedding
-👉 Dados reutilizados ou independentes → Referência + Lookup
+# 🎯 Regra prática
 
+👉 Dados estáveis e locais → Embedding
+👉 Dados reutilizados ou mutáveis → Referência + `$lookup`
+
+---
+
+# 🚀 Pipeline mental
+
+```txt
+find → match → lookup → unwind → group → project → sort → limit
 ```
+
+---
+
+# 🧠 Resumo Final
+
+MongoDB é ideal para:
+
+✔️ APIs modernas
+✔️ Sistemas escaláveis
+✔️ Dados sem schema rígido
+✔️ Relatórios com aggregation
+✔️ Estruturas flexíveis
+
+---
+
+# 🔥 Filosofia MongoDB
+
+## SQL:
+
+```txt
+Estrutura primeiro
 ```
+
+## MongoDB:
+
+```txt
+Dados primeiro
+```
+
