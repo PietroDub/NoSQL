@@ -15,6 +15,7 @@ Aqui temos uma coleção de produtos, que possui os seguintes campos:
 
 ---
 
+
 # 1) Utilize o operador `$gte` para encontrar todos os produtos com preço maior ou igual a 2000.
 
 ```js
